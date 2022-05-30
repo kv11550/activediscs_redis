@@ -17,7 +17,7 @@ $ npm run build
 ```
 
 # Download the latest ready-to-use package:
-1.	[Download the latest binary package](https://objectstorage.ca-toronto-1.oraclecloud.com/n/yzx9535dp9qz/b/bucket-20220417-1402/o/adredisadredis.zip)
+1.	[Download the latest binary package](https://objectstorage.ca-toronto-1.oraclecloud.com/n/yzx9535dp9qz/b/bucket-20220417-1402/o/activediscs_redis.zip)
 2.	Unzip the zip file
 3.  The downloadable package include everything, user don't need to go through the install and build steps.
 
