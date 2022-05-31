@@ -21,7 +21,6 @@ export default class ActionService {
     private _serverInfo: ServerInfo = new ServerInfo(this);
 
     constructor() {
-        console.log('debug -- 1');
         this._serverInfo.start();
     }
 
@@ -144,6 +143,10 @@ export default class ActionService {
         var field = body.field;
         var value = await client.HGET(hasheName, field);
 
+        console.log(value);
+
+        console.log(typeof value);
+
         return value;
 
     }
@@ -211,7 +214,19 @@ export default class ActionService {
 
         var value = body.value;
 
-        await client.rpush(listName, value);
+        await client.RPUSH(listName, value);
+
+    }
+
+    public llpush = async (body: any) => {
+
+        var client = await this.currentClient();
+
+        var listName = body.key;
+
+        var value = body.value;
+
+        await client.LPUSH(listName, value);
 
     }
 
@@ -281,11 +296,7 @@ export default class ActionService {
     public selectDB = async (body: any) => {
 
         var db = body.db;
-
         this._db = db;
-
-        console.log('debug 2');
-        console.log(this._db);
 
     }
 
@@ -295,9 +306,6 @@ export default class ActionService {
         var testingResult: boolean = false;
 
         try {
-
-            console.log('debug');
-            console.log(config);
 
             var clientBox = await new ClientBox(0, config);
 

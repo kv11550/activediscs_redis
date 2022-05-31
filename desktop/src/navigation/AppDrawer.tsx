@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import 'tw-elements';
 import toast, { Toaster } from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGear, faServer } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faServer, faPlus, faDatabase, faRotate, faComputer } from '@fortawesome/free-solid-svg-icons'
 
 const notify = () => toast('Updating the DB ...', {
   duration: 2000,
@@ -68,6 +68,9 @@ export default function AppDrawer(props: any) {
       case "list":
         url = "/ListContext";
         break;
+      case "newitem":
+        url = "/NewItem";
+        break;
 
     }
 
@@ -102,13 +105,13 @@ export default function AppDrawer(props: any) {
 
   const handleFilterChange = (event: any) => {
 
-    var newFilter = event.target.value;
+    var newFilter = event.target.value.toUpperCase();
 
     var newActiveMemItems = {
       filter: newFilter,
-      string: fullActiveMemItems.string.filter((item: string) => item.includes(newFilter)),
-      hashe: fullActiveMemItems.hashe.filter((item: string) => item.includes(newFilter)),
-      list: fullActiveMemItems.list.filter((item: string) => item.includes(newFilter)),
+      string: fullActiveMemItems.string.filter((item: string) => item.toUpperCase().includes(newFilter)),
+      hashe: fullActiveMemItems.hashe.filter((item: string) => item.toUpperCase().includes(newFilter)),
+      list: fullActiveMemItems.list.filter((item: string) => item.toUpperCase().includes(newFilter)),
     }
 
     setActiveMemItems(newActiveMemItems);
@@ -131,19 +134,23 @@ export default function AppDrawer(props: any) {
 
   const initPage = async (db: number) => {
 
-    await runCommand('api/cache/selectDB', { db: db });
+    if (serverName) {
 
-    setSelectedDb(db);
+      await runCommand('api/cache/selectDB', { db: db });
 
-    notify();
+      setSelectedDb(db);
 
-    await getActiveMemItems();
+      notify();
+
+      await getActiveMemItems();
+
+    }
 
   }
 
   useEffect(() => {
 
-   initPage(initDB)
+    initPage(initDB)
 
   }, [serverName]);
 
@@ -164,36 +171,51 @@ export default function AppDrawer(props: any) {
           </div>
         </div>
       </nav>
-      <div className="grid grid-cols-12 gap-1 flex-shrink-0 text-sm focus:outline-none px-1 rounded-lg shadow-lg my-1 " >
-        <div className="col-span-10 hover:bg-gray-300 text-sm px-0 pr-2 border-r border-gray-300" >
+      <div className="grid grid-cols-12 gap-1 flex-shrink-0 text-sm focus:outline-none px-1 rounded shadow-lg bg-blue-100 mt-1 pb-1 " >
+        <div className="col-span-2 hover:bg-gray-300 text-sm pl-2 mt-2" >
+          <button type="button" className=" rounded-full bg-white text-blue-500 leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-5 h-5"
+            onClick={() => showDetails('host', '')} data-bs-toggle="tooltip" data-bs-placement="top" title="Host Details">
+            <FontAwesomeIcon icon={faServer} />
+          </button>
 
-          <div className="grid grid-cols-12 gap-1 flex-shrink-0 my-1 ml-3">
+        </div>
 
-            <div className="col-span-4 flex pt-2">
-              <svg aria-hidden="true" focusable="false" data-prefix="fas" className="w-3 h-3 mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
-              </svg>
-              <span className="ml-1 leading-none">Host:</span>
-            </div>
+        <div className="col-span-2 hover:bg-gray-300 text-sm pl-2 mt-2" >
+          <button type="button" className="inline-block rounded-full bg-white text-blue-500 leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-5 h-5"
+            onClick={() => showDetails('settings', '')} data-bs-toggle="tooltip" data-bs-placement="top" title="Host Settings"  >
+            <FontAwesomeIcon icon={faGear} />
+          </button>
 
-            <div className="col-span-8 bg-white border border-solid border-gray-300 rounded transition py-1">
-              <span className="ml-2 leading-none" >{serverName}</span>
-            </div>
+        </div>
 
-          </div>
+        <div className="col-span-2 hover:bg-gray-300 text-sm pl-2 mt-2" >
+          <button type="button" className=" rounded-full bg-white text-blue-500 leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-5 h-5"
+            onClick={() => showDetails('newitem', '')} data-bs-toggle="tooltip" data-bs-placement="top" title="Add new key/element">
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
 
-          <div className="grid grid-cols-12 gap-1 flex-shrink-0 my-1 ml-3">
+        </div>
 
-            <div className="col-span-4 flex pt-2">
-              <svg aria-hidden="true" focusable="false" data-prefix="fas" className="w-3 h-3 mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
-              </svg>
-              <span className="ml-1 leading-none">DB:</span>
-            </div>
 
-            <div className="col-span-8 bg-white flex  ">
+      </div>
+      <div className="grid grid-cols-12 gap-1 flex-shrink-0 text-sm focus:outline-none px-1 rounded shadow-lg bg-blue-100 my-1 py-1 " >
 
-              <select className="form-select form-select-sm
+        <div className="col-span-4 flex pt-2 ml-2">
+          <FontAwesomeIcon icon={faComputer} />
+          <span className="ml-1 leading-none">Host:</span>
+        </div>
+
+        <div className="col-span-8 bg-white border border-solid border-gray-300 rounded transition py-1">
+          <span className="ml-2 leading-none" >{serverName}</span>
+        </div>
+
+        <div className="col-span-4 flex pt-2 ml-2">
+          <FontAwesomeIcon icon={faDatabase} />
+          <span className="ml-1 leading-none">DB:</span>
+        </div>
+
+        <div className="col-span-8 bg-white flex  ">
+          <select className="form-select form-select-sm
     appearance-none
     px-3
     py-1
@@ -209,32 +231,16 @@ export default function AppDrawer(props: any) {
     ease-in-out
     m-0
     focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label=".form-select-sm example"
-                value={selectedDb}
-                onChange={updateDb}
-              >
-                {Array.from(Array(10).keys()).map(db =>
-                  <option value={db}>{db}</option>
-                )}
+            value={selectedDb}
+            onChange={updateDb}
+          >
+            {Array.from(Array(16).keys()).map(db =>
+              <option value={db}>{db}</option>
+            )}
 
-              </select>
-            </div>
-
-          </div>
-
+          </select>
         </div>
-        <div className="col-span-2 items-center text-sm px-0 ml-2 flex-col" >
 
-          <button type="button" className=" rounded-full bg-blue-300 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-5 h-5 mt-2" 
-          onClick={() => showDetails('host', '')} data-bs-toggle="tooltip" data-bs-placement="top" title="Host Details">
-            <FontAwesomeIcon icon={faServer} />
-          </button>
-
-          <button type="button" className="inline-block rounded-full bg-blue-300 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-5 h-5 mt-2" 
-          onClick={() => showDetails('settings', '')} data-bs-toggle="tooltip" data-bs-placement="top" title="Host Settings"  >
-            <FontAwesomeIcon icon={faGear} />
-          </button>
-
-        </div>
       </div>
 
       <div>
@@ -249,9 +255,7 @@ export default function AppDrawer(props: any) {
               onChange={handleFilterChange} />
 
             <button className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh keys from server" onClick={getActiveMemItems}>
-              <svg aria-hidden="true" focusable="false" data-prefix="fas" className="w-3 h-3 mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor" d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"></path>
-              </svg>
+              <FontAwesomeIcon icon={faRotate} />
             </button>
 
 

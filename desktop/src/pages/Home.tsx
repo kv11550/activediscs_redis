@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     BarChart, CartesianGrid, XAxis, YAxis, Bar, Tooltip, Legend, PieChart, Pie,
     ResponsiveContainer, Cell,
     AreaChart, Area
 } from 'recharts';
 import { runCommand } from '../services/restfulClient';
+import { ActionType } from '../store/Helpers';
 
 const classNames = require('classnames');
 
@@ -34,6 +35,8 @@ const HomePage = (props: any) => {
     const [serverStatus, setServerStatus] = useState(initServerStatus);
 
     const serverName = useSelector((state: any) => state.serverName);
+
+    const dispatch = useDispatch();
 
     const cpuData = [
         {
@@ -78,34 +81,15 @@ const HomePage = (props: any) => {
 
         console.log(serverStatus);
 
+        if (serverStatus.serverName) {
+            dispatch({
+                type: ActionType.SERVER_NAME, payload: serverStatus.serverName
+            })
+        }
+
         setServerStatus(serverStatus);
 
-        /*
-
-        const cpuStatus = result.cpuStatus;
-
-        const memStatus = result.memStatus;
-
-        const cpuCurrent = result.cpuCurrent;
-
-        const memCurrent = result.memCurrent;
-
-        const serverName = result.serverName;
-
-        console.log(cpuCurrent);
-
-        setCpuStatus(cpuStatus);
-
-        setMemStatus(memStatus);
-
-        setCpuCurrent(cpuCurrent);
-
-        setMemCurrent(memCurrent);
-
-        setServerName(serverName);
-
-        */
-
+    
     }
 
     const toPercent = (decimal: any, fixed = 0) => `${(decimal * 100)}%`;
@@ -139,10 +123,7 @@ const HomePage = (props: any) => {
         }
     };
 
-
     useEffect(() => {
-
-        console.log('debug - 1');
 
         getServerStatus();
 
@@ -160,7 +141,7 @@ const HomePage = (props: any) => {
     return (
         <div className="gridbg-gray-100 font-sans px-2">
 
-            <nav className="relative w-full flex flex-wrap items-center justify-between py-2 border-b 0  shadow-lg">
+            <nav className="relative bg-blue-100 w-full flex flex-wrap items-center justify-between py-2 border-b 0  shadow-lg">
                 <div className="container-fluid px-2">
                     <a className="flex items-center text-gray-900 hover:text-gray-900 focus:text-gray-900 mt-2 lg:mt-0 mr-1" href="#">
                         <span className="font-bold text-lg text-blue-600">Server Status</span>
@@ -290,7 +271,7 @@ const HomePage = (props: any) => {
                                             </svg></i></div>
                                         </div>
                                         <div className="flex-1 text-right md:text-center">
-                                            <h5 className="font-bold uppercase text-gray-500">Server Uptime</h5>
+                                            <h5 className="font-bold uppercase text-gray-500">Server Up Days</h5>
                                             <h3 className="font-bold text-3xl">{serverStatus.uptime_in_days}</h3>
                                         </div>
                                     </div>

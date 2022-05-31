@@ -43,8 +43,10 @@ const HashePage = (props: any) => {
             field: field
         });
 
+        var context: string = typeof result !== 'string' ? JSON.stringify(result): result;
+
         dispatch({
-            type: ActionType.NEW_VALUE, payload: result
+            type: ActionType.NEW_VALUE, payload: context
         })
 
         setField(field);
@@ -75,7 +77,7 @@ const HashePage = (props: any) => {
 
         <div className="grid grid-cols-12 gap-2 flex-shrink-0 w-full">
 
-            <div className="col-span-12 bg-white flex  ">
+            <div className="col-span-12 bg-blue-100 flex  ">
                 <nav className="relative w-full flex flex-wrap items-center justify-between py-2 border-b 0  shadow-lg">
                     <div className="container-fluid px-2">
                         <div className="flex items-center text-gray-900 hover:text-gray-900 focus:text-gray-900 mt-2 lg:mt-0 mr-1" >

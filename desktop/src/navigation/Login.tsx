@@ -38,22 +38,11 @@ const LoginPage = (props: any) => {
             "pass": password
         });
 
-        console.log(user);
-
-
-
         if (user.user && user.access_token) {
             dispatch({
                 type: ActionType.LOGIN_SUCCESS, payload: user
             })
         }
-
-        console.log(stateResult);
-
-
-
-        console.log('debug -- 1');
-        console.log(user);
 
     }
 
@@ -62,12 +51,8 @@ const LoginPage = (props: any) => {
         console.log(stateResult);
     }
 
-
-    console.log('debug - 1');
-    console.log(stateResult);
-
     if (stateResult && stateResult.user) {
-        console.log(stateResult);
+        // console.log(stateResult);
 
         return <Redirect to={{
             pathname: "/",

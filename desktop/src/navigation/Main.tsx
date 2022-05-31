@@ -6,6 +6,7 @@ import HashePage from '../pages/HashePage';
 import ListPage from '../pages/ListPage';
 import SettingsPage from '../pages/SettingsPage';
 import HomePage from '../pages/Home';
+import NewItemPage from '../pages/NewItemPage';
 import LoginPage from './Login';
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,9 +30,6 @@ export default function MainWindow() {
   const handleChange = (event: any) => {
     setAuth(event.target.checked);
   };
-
-
-
 
 
   const renderDrawer = () => {
@@ -110,6 +108,16 @@ export default function MainWindow() {
     );
   });
 
+  const NewItem = isAuthenticated((props: any): any => {
+
+    return (
+      <NewItemPage
+        contextKey={props.location.state}
+
+      />
+    );
+  });
+
 
   const renderAccount = (props: any): any => {
 
@@ -130,6 +138,7 @@ export default function MainWindow() {
         <Route path='/HasheContext' component={HasheContext} />
         <Route path='/ListContext' component={ListContext} />
         <Route path='/Settings' component={Settings} />
+        <Route path='/NewItem' component={NewItem} />
         <Route path='/account' render={renderAccount} />
       </main>
     </div>

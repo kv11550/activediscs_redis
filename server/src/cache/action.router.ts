@@ -137,6 +137,17 @@ cacheRouter.post("/lrpush", async (req: Request, res: Response) => {
 });
 
 
+cacheRouter.post("/llpush", async (req: Request, res: Response) => {
+    try {
+        var body = req.body;
+        var value = await actionService.llpush(body);
+        res.status(200).send(value);
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
+
+
 cacheRouter.post("/lrange", async (req: Request, res: Response) => {
     try {
         var body = req.body;

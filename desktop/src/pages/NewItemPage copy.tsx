@@ -10,7 +10,7 @@ import { faFloppyDisk, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 const classNames = require('classnames');
 
-const HashePage = (props: any) => {
+const NewItemPage = (props: any) => {
 
     const { classes, contextKey } = props;
 
@@ -78,16 +78,16 @@ const HashePage = (props: any) => {
 
     useEffect(() => {
 
-        getIdList();
+       // getIdList();
 
-    }, [contextKey]);
+    }, []);
 
 
     return (
 
         <div className="grid grid-cols-12 gap-2 flex-shrink-0 w-full">
 
-            <div className="col-span-12 bg-blue-100 flex  ">
+            <div className="col-span-12 bg-white flex  ">
                 <nav className="relative w-full flex flex-wrap items-center justify-between py-2 border-b 0  shadow-lg">
                     <div className="container-fluid px-2">
                         <div className="flex items-center text-gray-900 hover:text-gray-900 focus:text-gray-900 mt-2 lg:mt-0 mr-1">
@@ -111,19 +111,35 @@ const HashePage = (props: any) => {
                 </nav>
             </div>
 
-            <div className="col-span-1 bg-white flex ">
+            <div className="col-span-12 bg-white flex ">
 
-                <ul className="bg-white rounded-lg border text-sm border-gray-200 w-full text-gray-900">
-                    {
-                        idList.map(item => (
-                            <li className={`px-2 py-1 mb-1 border-b border-gray-200 w-full overflow-x-auto ${id === item ? "bg-gray-200" : ''}  `} onClick={() => getValue(item)}>
-                                {`${item}`}
-                            </li>
-                        ))
-                    }
-                </ul>
+                <div className="flex justify-center">
+                    <div>
+                        <div className="form-check">
+                            <input className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault1">
+                                    String
+                                </label>
+                            </input>
+                        </div>
+                        <div className="form-check">
+                            <input className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault2">
+                                    Hash
+                                </label>
+                            </input>
+                        </div>
+                        <div className="form-check">
+                            <input className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault3" checked>
+                                <label className="form-check-label inline-block text-gray-800" htmlFor="flexRadioDefault3">
+                                    List
+                                </label>
+                            </input>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="col-span-11 bg-white flex ">
+            <div className="col-span-12 bg-white flex ">
                 <ContextDetails value={newValue} />
             </div>
         </div>
@@ -131,5 +147,5 @@ const HashePage = (props: any) => {
     );
 };
 
-export default HashePage as any;
+export default NewItemPage as any;
 

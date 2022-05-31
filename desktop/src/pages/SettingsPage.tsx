@@ -165,7 +165,7 @@ const SettingsPage = (props: any) => {
 
                 <div className="w-full md:w-1/2 flex flex-col shadow-inner">
 
-                    <div className="py-2 px-6 border-b shadow-lg border-gray-300 bg-gray-300">
+                    <div className="py-2 px-6 border-b shadow-lg border-gray-300 bg-blue-100">
                         <span className="font-bold text-lg text-blue-500 ">Server List</span>
                     </div>
 

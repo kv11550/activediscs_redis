@@ -23,8 +23,10 @@ const StringPage = (props: any) => {
             key: contextKey
         });
 
+        var context: string = typeof result !== 'string' ? JSON.stringify(result): result;
+
         dispatch({
-            type: ActionType.NEW_VALUE, payload: result
+            type: ActionType.NEW_VALUE, payload: context
         })
 
     }
@@ -51,7 +53,7 @@ const StringPage = (props: any) => {
 
     return (
         <div>
-            <nav className="relative w-full flex flex-wrap py-2 border-b 0  shadow-lg">
+            <nav className="relative w-full flex flex-wrap py-2 border-b 0  bg-blue-100 shadow-lg mb-2">
 
                 <div className="container-fluid px-2">
 

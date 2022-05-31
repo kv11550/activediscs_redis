@@ -19,6 +19,9 @@ export default class ServerInfo {
 
     private _connected_clients: number;
 
+    private _serverName: string;
+
+
     public get memory(): number {
         return this._memory;
     }
@@ -47,6 +50,13 @@ export default class ServerInfo {
         this._uptime_in_days = value;
     }
 
+    public get serverName(): string {
+        return this._serverName;
+    }
+    public set serverName(value: string) {
+        this._serverName = value;
+    }
+
     public get serverStatus() : any {
         return {
             memory: this._memory,
@@ -54,7 +64,8 @@ export default class ServerInfo {
             uptime_in_days: this._uptime_in_days,
             commands_processed: this._commands_processed,
             connected_clients: this._connected_clients,
-            memoryList: this._memoryList
+            memoryList: this._memoryList,
+            serverName: this._serverName
         }
     }
 
@@ -66,6 +77,7 @@ export default class ServerInfo {
         this._commands_processed = 0;
         this._connected_clients = 0;
         this._actionService = actionService;
+        this._serverName = '';
     }
 
     public async start() {
@@ -87,7 +99,9 @@ export default class ServerInfo {
 
         var info = await this._actionService.getInfo();
 
-        console.log(info);
+        this._serverName = this._actionService.connConfig.name;
+
+       // console.log(info);
 
         var infoList = info.split("\r\n");
 
@@ -109,7 +123,7 @@ export default class ServerInfo {
 
         this._memoryList.push(newItem);
 
-        console.log(this._memory);
+      //  console.log(this._memory);
 
     }
 

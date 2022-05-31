@@ -8,26 +8,18 @@ const ContextDetails = (props: any) => {
 
     const dispatch = useDispatch();
 
-  //  const [newValue, setNewValue] = useState(value);
-
     const handleNewValue = (event: any) => {
 
         var newValue = event.target.value;
-      //  setNewValue(newValue);
 
-        
         dispatch({
             type: ActionType.NEW_VALUE, payload: newValue
-        })
-        
+        })        
 
     }
 
-    console.log(value);
-
-
     useEffect(() => {
-        console.log('debug');
+      // console.log('debug');
       //  setNewValue(value);
     }, [value]);
 
