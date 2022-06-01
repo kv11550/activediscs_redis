@@ -163,6 +163,8 @@ export default class ActionService {
 
         var keys = await client.keys('*');
 
+        keys.sort();
+
         //console.log(keys);
 
         for (let key of keys) {
@@ -196,10 +198,9 @@ export default class ActionService {
 
         var hasheName = body.key;
 
-        console.log('debug');
-        console.log(client);
-
         var result = await client.HKEYS(hasheName);
+
+        result.sort();
 
         return result;
 
