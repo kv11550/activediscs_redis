@@ -11,6 +11,7 @@ import LoginPage from './Login';
 import { Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { isAuthenticated } from '../services/AppSecurity';
+import MessageBox from '../pages/MessageBox';
 
 const classNames = require('classnames');
 
@@ -141,6 +142,7 @@ export default function MainWindow() {
         <Route path='/NewItem' component={NewItem} />
         <Route path='/account' render={renderAccount} />
       </main>
+      <MessageBox/>
     </div>
 
   )

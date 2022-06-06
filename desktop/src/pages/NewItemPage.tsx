@@ -6,8 +6,8 @@ import ContextDetails from './ContextDetails';
 import { saveAs } from 'file-saver';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk, faDownload } from '@fortawesome/free-solid-svg-icons';
-import toast, { Toaster } from 'react-hot-toast';
 
+/*
 const notify = () => toast('save to redis ... done !', {
     duration: 2000,
     position: 'bottom-center',
@@ -18,7 +18,7 @@ const notify = () => toast('save to redis ... done !', {
     },
     icon: '👏',
 });
-
+*/
 
 
 const classNames = require('classnames');
@@ -91,7 +91,12 @@ const NewItemPage = (props: any) => {
                 break;
         }
 
-        notify();
+        dispatch({
+            type: ActionType.SHOW_MESSAGE, payload: {
+                time: new Date().toString(),
+                payload: `save to redis ... done !`
+            }
+        })
 
 
         //   setStatus('completed');
@@ -109,8 +114,6 @@ const NewItemPage = (props: any) => {
     return (
 
         <div className="flex-shrink-0 w-full">
-
-            <Toaster />
 
             <div className="bg-blue-100 flex  ">
                 <nav className="relative w-full flex flex-wrap items-center justify-between py-2 border-b 0  shadow-lg">

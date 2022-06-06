@@ -5,7 +5,8 @@ import { ActionType } from '../store/Helpers';
 import ContextDetails from './ContextDetails';
 import { saveAs } from 'file-saver';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFloppyDisk, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faFloppyDisk, faDownload } from '@fortawesome/free-solid-svg-icons';
+
 
 const classNames = require('classnames');
 
@@ -127,6 +128,15 @@ const HashePage = (props: any) => {
             field: field,
             value: newValue
         });
+
+        dispatch({
+            type: ActionType.SHOW_MESSAGE, payload: {
+                time: new Date().toString(),
+                payload: `Hashe ${contextKey} Field: ${field} is saved`
+            }
+        })
+
+        
     }
 
     const download = () => {

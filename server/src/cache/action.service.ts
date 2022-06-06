@@ -134,18 +134,12 @@ export default class ActionService {
 
     public hget = async (body: any): Promise<string> => {
 
-        console.log(body);
-
         var hasheName = body.key;
 
         var client = await this.currentClient();
 
         var field = body.field;
         var value = await client.HGET(hasheName, field);
-
-        console.log(value);
-
-        console.log(typeof value);
 
         return value;
 

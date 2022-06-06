@@ -42,6 +42,14 @@ const StringPage = (props: any) => {
             key: contextKey,
             value: newValue
         });
+
+        dispatch({
+            type: ActionType.SHOW_MESSAGE, payload: {
+                time: new Date().toString(),
+                payload: `Hashe ${contextKey} is saved`
+            }
+        })
+
     }
 
     useEffect(() => {

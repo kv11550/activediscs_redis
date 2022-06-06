@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { runCommand, setToken } from '../services/restfulClient';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionType } from '../store/Helpers';
@@ -30,13 +30,58 @@ const HashePage = (props: any) => {
 
         var listIdList = [...Array(Number(max))].map((item: any, index: number) => index);
 
-        setIdList(listIdList);
+        //   setIdList(listIdList);
 
-        if (listIdList.length > 0) {
-            await getValue(0);
-        }
+        //   if (listIdList.length > 0) {
+        //       await getValue(0);
+        //   }
+
+        setListIds({
+            idList: listIdList
+        });
+
 
     }
+
+
+    const [listIds, setListIds] = useReducer((state: any, action: any) => {
+
+        console.log('debug');
+        console.log(action);
+        console.log(state);
+
+        var newState = { ...state, filter: action.filter, idList: state.fullIdList };
+
+        if (action.filter) {
+            newState = {
+                filter: action.filter,
+                idList: state.fullIdList.filter((id: number) => id.toString().includes(action.filter)),
+                fullIdList: state.fullIdList
+            };
+        };
+
+        if (action.idList) {
+            newState = {
+                filter: '',
+                idList: action.idList,
+                fullIdList: action.idList
+            }
+        }
+
+        console.log(newState);
+
+        return newState;
+    }, { filter: '', fullIdList: [], idList: [] });
+
+
+    const handleFilterChange = async (event: any) => {
+
+        setListIds({
+            filter: event.target.value
+        })
+
+    }
+
 
     const getValue = async (id: number) => {
 
@@ -65,8 +110,15 @@ const HashePage = (props: any) => {
             id: id,
             value: newValue
         });
-    }
 
+        dispatch({
+            type: ActionType.SHOW_MESSAGE, payload: {
+                time: new Date().toString(),
+                payload: `List ${contextKey} Id: ${id} is saved`
+            }
+        })
+
+    }
 
 
     const download = () => {
@@ -75,12 +127,24 @@ const HashePage = (props: any) => {
     }
 
 
-
     useEffect(() => {
 
         getIdList();
 
     }, [contextKey]);
+
+
+    useEffect(() => {
+
+        if (listIds.idList.length > 0) {
+            getValue(listIds.idList[0]);
+        } else {
+            dispatch({
+                type: ActionType.NEW_VALUE, payload: ''
+            })
+        }
+
+    }, [listIds]);
 
 
     return (
@@ -111,11 +175,15 @@ const HashePage = (props: any) => {
                 </nav>
             </div>
 
-            <div className="col-span-1 bg-white flex ">
+            <div className="col-span-1 bg-white flex flex-col">
+
+                <textarea className="text-sm px-3 border-b border-gray-300 ml-1 my-2" style={{ resize: "none" }}
+                    placeholder="Search" rows={1} value={listIds.filter}
+                    onChange={handleFilterChange} />
 
                 <ul className="bg-white rounded-lg border text-sm border-gray-200 w-full text-gray-900">
                     {
-                        idList.map(item => (
+                        listIds.idList.map((item: any) => (
                             <li className={`px-2 py-1 mb-1 border-b border-gray-200 w-full overflow-x-auto ${id === item ? "bg-gray-200" : ''}  `} onClick={() => getValue(item)}>
                                 {`${item}`}
                             </li>
