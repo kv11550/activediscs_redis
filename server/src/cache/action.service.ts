@@ -13,9 +13,9 @@ import moment from 'moment';
 export default class ActionService {
 
     private _connConfig: any = null;
- 
+
     private _clientBoxList: ClientBox[] = [];
-   
+    
     private _db: number = 0;
 
     private _serverInfo: ServerInfo = new ServerInfo(this);
@@ -145,6 +145,95 @@ export default class ActionService {
 
     }
 
+
+    public export = async (body: any): Promise<any> => {
+
+        var client = await this.currentClient();
+
+        var keys = await this.keys(body);
+
+        var result: any = {
+            string: [],
+            hashe: [],
+            list: []
+        };
+
+        for (const key of keys.string) {
+
+            var value: string = await client.get(key);
+
+            result.string.push({ [key]: value });
+
+        }
+
+        for (const key of keys.hashe) {
+
+            var fields: string[] = await client.HKEYS(key);
+
+            var hashResult: any = {};
+
+            for (const field of fields) {
+                hashResult[field] = await client.HGET(key, field);
+            }
+
+            result.hashe.push({ [key]: hashResult });
+
+        }
+
+
+        for (const key of keys.list) {
+
+            var values: string[] = await client.LRANGE(key, 0, -1);
+
+            result.list.push({ [key]: values });
+
+        }
+
+        return result;
+
+    }
+
+
+    public import = async (body: any): Promise<any> => {
+
+        var client = await this.currentClient();
+
+        for (const result of body.string) {
+            for (const [key, value] of Object.entries(result)) {
+                await client.set(key, value);
+            }
+        }
+
+        for (const result of body.hashe) {
+            for (const [key, value] of Object.entries(result)) {
+
+                var entry: any = result[key];
+
+                console.log(`${key}: ${entry}`);
+
+                for (const [field, value] of Object.entries(entry)) {
+
+                    console.log(`${key}: ${field}: ${value}`);
+                    await client.HSET(key, field, value);
+                }  
+
+            }
+        }
+
+
+        for (const result of body.list) {
+            for (const [key, value] of Object.entries(result)) {
+                console.log(`${key}: ${value}`);
+                await client.RPUSH(key, value);
+            }
+        }
+
+        return "ok";
+
+
+    }
+
+
     public keys = async (body: any): Promise<ItypeList> => {
 
         var client = await this.currentClient();
@@ -160,6 +249,15 @@ export default class ActionService {
         keys.sort();
 
         //console.log(keys);
+
+        var filter = body.filter ? body.filter.toUpperCase() : "";
+        console.log(filter);
+
+        console.log(keys);
+
+        if (filter) {
+            keys = keys.filter((item: string) => item.toUpperCase().includes(filter));
+        }
 
         for (let key of keys) {
 
@@ -280,7 +378,7 @@ export default class ActionService {
 
     }
 
-    public getInfo = async () : Promise<string> => {
+    public getInfo = async (): Promise<string> => {
 
         var client = await this.currentClient();
         var info: string = await client.info();
@@ -307,7 +405,7 @@ export default class ActionService {
             console.log(clientBox);
 
             var client = clientBox.client;
-    
+
             var info = await client.info();
 
             console.log(info);
@@ -325,7 +423,7 @@ export default class ActionService {
         }
 
         return testingResult;
-    
+
     }
 
     public saveHostList = async (hostList: any) => {

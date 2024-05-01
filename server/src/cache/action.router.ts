@@ -114,6 +114,30 @@ cacheRouter.post("/keys", async (req: Request, res: Response) => {
 });
 
 
+cacheRouter.post("/export", async (req: Request, res: Response) => {
+    try {
+        var body = req.body;
+        var value = await actionService.export(body);
+        res.status(200).send(value);
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
+
+
+cacheRouter.post("/import", async (req: Request, res: Response) => {
+    try {
+        var body = req.body;
+        var value = await actionService.import(body);
+        res.status(200).send(value);
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
+
+
+
+
 cacheRouter.post("/hkeys", async (req: Request, res: Response) => {
     try {
         var body = req.body;
